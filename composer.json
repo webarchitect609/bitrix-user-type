@@ -1,0 +1,24 @@
+{
+  "name": "webarchitect609/bitrix-user-type",
+  "description": "Set of custom Bitrix user property types and basic auxiliary functionality to help develop new types as easy and fast as it possible.",
+  "keywords": [
+    "bitrix",
+    "userfield"
+  ],
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Sergey Gripinskiy",
+      "email": "web-architect@mail.ru"
+    }
+  ],
+  "require": {
+    "php": ">=5.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "WebArch\\BitrixUserPropertyType\\": "src/main"
+    }
+  }
+}
