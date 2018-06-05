@@ -4,25 +4,16 @@ namespace WebArch\BitrixUserPropertyType\Abstraction;
 
 abstract class UserTypeBase implements UserTypeInterface
 {
-    const BASE_TYPE_INT = 'int';
-
-    const BASE_TYPE_DOUBLE = 'double';
-
-    const BASE_TYPE_STRING = 'string';
-
-    const BASE_TYPE_DATE = 'date';
-
-    const BASE_TYPE_DATETIME = 'datetime';
 
     /**
      * @inheritdoc
      */
-    public static function init()
+    public function init()
     {
         AddEventHandler(
             'main',
             'OnUserTypeBuildList',
-            [__CLASS__, 'getUserTypeDescription'],
+            [$this, 'getUserTypeDescription'],
             99999
         );
     }
@@ -30,14 +21,46 @@ abstract class UserTypeBase implements UserTypeInterface
     /**
      * @inheritdoc
      */
-    public static function getUserTypeDescription()
+    public function getUserTypeDescription()
     {
         return [
-            "USER_TYPE_ID" => __CLASS__,
-            "CLASS_NAME"   => __CLASS__,
-            "DESCRIPTION"  => self::getDescription(),
-            "BASE_TYPE"    => self::getBaseType(),
+            "USER_TYPE_ID" => $this->getUserTypeId(),
+            "CLASS_NAME"   => static::class,
+            "DESCRIPTION"  => $this->getDescription(),
+            "BASE_TYPE"    => $this->getBaseType(),
         ];
+    }
+
+    /**
+     * Возвращает уникальное имя типа на основе полного имени класса с учётом того, что длина не может превышать 50
+     * символов.
+     *
+     * @return string
+     */
+    private function getUserTypeId()
+    {
+        return mb_substr($this->getClassName($this) . md5(static::class), 0, 50);
+    }
+
+    /**
+     * Возвращает имя класса без namespace
+     *
+     * @param $object
+     *
+     * @return string
+     *
+     * TODO Вынести в пакет webarchitect609/php-tools , где будут общие утилиты.
+     */
+    private static function getClassName($object)
+    {
+        $className = get_class($object);
+        $pos = strrpos($className, '\\');
+        if ($pos) {
+
+            return substr($className, $pos + 1);
+        }
+
+        return $pos;
     }
 
 }

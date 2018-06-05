@@ -12,27 +12,37 @@ namespace WebArch\BitrixUserPropertyType\Abstraction;
  */
 interface UserTypeInterface
 {
+    const BASE_TYPE_INT = 'int';
+
+    const BASE_TYPE_DOUBLE = 'double';
+
+    const BASE_TYPE_STRING = 'string';
+
+    const BASE_TYPE_DATE = 'date';
+
+    const BASE_TYPE_DATETIME = 'datetime';
+
     /**
      * Инициализирует тип свойства, добавляя вызов getUserTypeDescription() при событии
      * main::OnUserTypeBuildList
      *
      * @return void
      */
-    public static function init();
+    public function init();
 
     /**
      * Возвращает базовый тип на котором будут основаны операции фильтра (int, double, string, date, datetime)
      *
      * @return string
      */
-    public static function getBaseType();
+    public function getBaseType();
 
     /**
      * Возвращает описание для показа в интерфейсе (выпадающий список и т.п.)
      *
      * @return string
      */
-    public static function getDescription();
+    public function getDescription();
 
     /**
      * Обработчик события OnUserTypeBuildList.
@@ -49,19 +59,66 @@ interface UserTypeInterface
      *
      * @return array
      */
-    public static function getUserTypeDescription();
+    public function getUserTypeDescription();
+
+    /**
+     * Возвращает тип столбца в базе данных для хранения значения и вызывается при добавлении нового свойства.
+     *
+     * <p>Эта функция вызывается для конструирования SQL запроса
+     * создания колонки для хранения не множественных значений свойства.</p>
+     * <p>Значения множественных свойств хранятся не в строках, а столбиках (как в инфоблоках)
+     * и тип такого поля в БД всегда text.</p>
+     *
+     * @internal Метод обязательно должен быть статическим, т.к. в \CAllUserTypeManager::GetDBColumnType он вызывается
+     *     только таким способом. При создании своих типов рекомендуется использовать готовые реализации из
+     *     \CUserTypeInteger::GetDBColumnType , \CUserTypeString::GetDBColumnType и т.п.
+     *
+     * @param array $userField Массив описывающий поле
+     *
+     * @return string
+     *
+     * @see \CUserTypeInteger::GetDBColumnType
+     * @see \CUserTypeString::GetDBColumnType
+     */
+    public static function getDBColumnType($userField);
 
     /**
      * Эта функция вызывается при выводе формы редактирования значения свойства.
      *
      * <p>Возвращает html для встраивания в ячейку таблицы.
      * в форму редактирования сущности (на вкладке "Доп. свойства")</p>
-     * <p>Элементы $arHtmlControl приведены к html безопасному виду.</p>
+     * <p>Элементы $htmlControl приведены к html безопасному виду.</p>
      *
-     * @param array $arUserField Массив описывающий поле.
-     * @param array $arHtmlControl Массив управления из формы. Содержит элементы NAME и VALUE.
+     * @param array $userField Массив описывающий поле.
+     * @param array $htmlControl Массив управления из формы. Содержит элементы NAME и VALUE.
      *
      * @return string HTML для вывода.
      */
-    public static function getEditFormHTML($arUserField, $arHtmlControl);
+    public static function getEditFormHTML($userField, $htmlControl);
+
+    /**
+     * Эта функция вызывается при выводе формы настройки свойства.
+     *
+     * <p>Возвращает html для встраивания в 2-х колоночную таблицу.
+     * в форму usertype_edit.php</p>
+     * <p>т.е. tr td bla-bla /td td edit-edit-edit /td /tr </p>
+     *
+     * @param array $userField
+     * @param array $htmlControl
+     * @param bool $isVarsFromForm
+     *
+     * @return string
+     */
+    public static function getSettingsHTML($userField, $htmlControl, $isVarsFromForm);
+
+    /**
+     * Эта функция вызывается перед сохранением метаданных свойства в БД.
+     *
+     * <p>Она должна "очистить" массив с настройками экземпляра типа свойства.
+     * Для того что бы случайно/намеренно никто не записал туда всякой фигни.</p>
+     * @param array $userField Массив описывающий поле. <b>Внимание!</b> это описание поля еще не сохранено в БД!
+     *
+     * @return array Массив который в дальнейшем будет сериализован и сохранен в БД.
+     */
+    public static function prepareSettings($userField);
 }
