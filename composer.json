@@ -3,7 +3,8 @@
   "description": "Set of custom Bitrix user property types and basic auxiliary functionality to help develop new types as easy and fast as it possible.",
   "keywords": [
     "bitrix",
-    "userfield"
+    "userfield",
+    "usertype"
   ],
   "type": "library",
   "license": "MIT",
