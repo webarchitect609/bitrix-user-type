@@ -4,16 +4,15 @@ namespace WebArch\BitrixUserPropertyType\Abstraction;
 
 abstract class UserTypeBase implements UserTypeInterface
 {
-
     /**
      * @inheritdoc
      */
-    public function init()
+    public static function init()
     {
         AddEventHandler(
             'main',
             'OnUserTypeBuildList',
-            [$this, 'getUserTypeDescription'],
+            [static::class, 'getUserTypeDescription'],
             99999
         );
     }
@@ -21,43 +20,44 @@ abstract class UserTypeBase implements UserTypeInterface
     /**
      * @inheritdoc
      */
-    public function getUserTypeDescription()
+    public static function getUserTypeDescription()
     {
         return [
-            "USER_TYPE_ID" => $this->getUserTypeId(),
+            "USER_TYPE_ID" => static::getUserTypeId(),
             "CLASS_NAME"   => static::class,
-            "DESCRIPTION"  => $this->getDescription(),
-            "BASE_TYPE"    => $this->getBaseType(),
+            "DESCRIPTION"  => static::getDescription(),
+            "BASE_TYPE"    => static::getBaseType(),
         ];
     }
 
     /**
-     * Возвращает уникальное имя типа на основе полного имени класса с учётом того, что длина не может превышать 50
-     * символов.
-     *
-     * @return string
+     * @inheritdoc
      */
-    private function getUserTypeId()
+    public static function getUserTypeId()
     {
-        return mb_substr($this->getClassName($this) . md5(static::class), 0, 50);
+        return mb_substr(
+            self::getClassNameWithoutNamespace(static::class) . md5(static::class),
+            0,
+            self::MAX_USER_TYPE_LEN
+        );
     }
 
     /**
      * Возвращает имя класса без namespace
      *
-     * @param $object
+     * @param string $className
      *
      * @return string
      *
      * TODO Вынести в пакет webarchitect609/php-tools , где будут общие утилиты.
+     * TODO Разрешить передавать mixed - объект и брать его класс, или же полное имя класса.
      */
-    private static function getClassName($object)
+    private static function getClassNameWithoutNamespace($className)
     {
-        $className = get_class($object);
-        $pos = strrpos($className, '\\');
+        $pos = mb_strrpos($className, '\\');
         if ($pos) {
 
-            return substr($className, $pos + 1);
+            return mb_substr($className, $pos + 1);
         }
 
         return $pos;

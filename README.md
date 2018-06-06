@@ -16,7 +16,7 @@
 
 2 В init.php инициализировать используемые типы свойств. Например, 
 
-`(new \WebArch\BitrixUserPropertyType\IblockSectionLinkType())->init();`
+`\WebArch\BitrixUserPropertyType\IblockSectionLinkType::init();`
 
 3 Теперь можно создавать новые пользовательские поля, выбрав свойство нового типа!
 
@@ -33,6 +33,6 @@
 
 5 Инициализировать свой тип свойства в init.php
 
-`(new MyUserType())->init();`
+`MyUserType::init();`
 
 6 Теперь можно создавать новые пользовательские поля, выбрав свойство нового типа!

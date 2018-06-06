@@ -33,7 +33,7 @@ class IblockSectionLinkType extends UserTypeBase
     /**
      * @inheritdoc
      */
-    public function getBaseType()
+    public static function getBaseType()
     {
         return self::BASE_TYPE_INT;
     }
@@ -41,7 +41,7 @@ class IblockSectionLinkType extends UserTypeBase
     /**
      * @inheritdoc
      */
-    public function getDescription()
+    public static function getDescription()
     {
         return 'Привязка к разделу инфоблока(с окном поиска)';
     }

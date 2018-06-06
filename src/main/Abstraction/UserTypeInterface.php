@@ -4,6 +4,10 @@ namespace WebArch\BitrixUserPropertyType\Abstraction;
 
 /**
  * Interface UserTypeInterface
+ *
+ * @internal Все методы пришлось сделать статическими и работать только благодаря позднему статическому связыванию,
+ *     т.к. Битрикс вызывает их строго статически. По-другому не получится.
+ *
  * @package WebArch\BitrixUserPropertyType\Abstraction
  *
  * @see \CUserTypeString для дополнительной справки, т.к. документации не существует
@@ -23,26 +27,39 @@ interface UserTypeInterface
     const BASE_TYPE_DATETIME = 'datetime';
 
     /**
+     * Максимальная разрешённая длинна уникального идентификатора типа.
+     */
+    const MAX_USER_TYPE_LEN = 50;
+
+    /**
      * Инициализирует тип свойства, добавляя вызов getUserTypeDescription() при событии
      * main::OnUserTypeBuildList
      *
      * @return void
      */
-    public function init();
+    public static function init();
 
     /**
      * Возвращает базовый тип на котором будут основаны операции фильтра (int, double, string, date, datetime)
      *
      * @return string
      */
-    public function getBaseType();
+    public static function getBaseType();
 
     /**
      * Возвращает описание для показа в интерфейсе (выпадающий список и т.п.)
      *
      * @return string
      */
-    public function getDescription();
+    public static function getDescription();
+
+    /**
+     * Возвращает уникальное имя типа на основе полного имени класса с учётом того, что длина не может превышать
+     * MAX_USER_TYPE_LEN символов.
+     *
+     * @return string
+     */
+    public static function getUserTypeId();
 
     /**
      * Обработчик события OnUserTypeBuildList.
@@ -59,7 +76,7 @@ interface UserTypeInterface
      *
      * @return array
      */
-    public function getUserTypeDescription();
+    public static function getUserTypeDescription();
 
     /**
      * Возвращает тип столбца в базе данных для хранения значения и вызывается при добавлении нового свойства.
@@ -116,6 +133,7 @@ interface UserTypeInterface
      *
      * <p>Она должна "очистить" массив с настройками экземпляра типа свойства.
      * Для того что бы случайно/намеренно никто не записал туда всякой фигни.</p>
+     *
      * @param array $userField Массив описывающий поле. <b>Внимание!</b> это описание поля еще не сохранено в БД!
      *
      * @return array Массив который в дальнейшем будет сериализован и сохранен в БД.
