@@ -63,4 +63,24 @@ abstract class UserTypeBase implements UserTypeInterface
         return $pos;
     }
 
+    /**
+     * Возвращает массив, описывающий ошибку.
+     *
+     * @param array $userField Массив описывающий поле.
+     * @param $errorMessage
+     *
+     * @return array [ 'id' => $userField['FIELD_NAME'], 'text' => $errorMessage]
+     */
+    protected static function createError($userField, $errorMessage)
+    {
+        if (!isset($userField['FIELD_NAME'])) {
+            $userField['FIELD_NAME'] = null;
+        }
+
+        return [
+            'id'   => $userField['FIELD_NAME'],
+            'text' => trim($errorMessage),
+        ];
+    }
+
 }

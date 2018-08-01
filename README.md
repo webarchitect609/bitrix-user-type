@@ -20,16 +20,22 @@
 
 3 Теперь можно создавать новые пользовательские поля, выбрав свойство нового типа!
 
+
+
 Как разработать свой тип свойства: 
 ----------------------------------
 
-1 Наследовать свой тип от базовой реализации `\WebArch\BitrixUserPropertyType\Abstraction\UserTypeBase`,
+1 Наследовать свой тип от базовой реализации `\WebArch\BitrixUserPropertyType\Abstraction\UserTypeBase` или 
+самостоятельно реализовать интерфейс `\WebArch\BitrixUserPropertyType\Abstraction\UserTypeInterface`.   
 
-2 Определить обязательный статический метод `getDBColumnType()`, используя один из подходящих трейтов 
-`\WebArch\BitrixUserPropertyType\Abstraction\*DbColTypeTrait`, чтобы не изобретать одно и то же.
+2 Определить обязательный статический метод `getDBColumnType()`, используя один из подходящих трейтов из namespace 
+`WebArch\BitrixUserPropertyType\Abstraction\DbColumnType`
 
 3 Определить другие обязательные методы, такие как `getBaseType()`, `getDescription()` и т.д., которые требует 
 `\WebArch\BitrixUserPropertyType\Abstraction\UserTypeInterface`
+
+4 При необходимости реализации других поддерживаемых методов следует рассмотреть и реализовать интерфейсы из namespace 
+`\WebArch\BitrixUserPropertyType\Abstraction\Custom`
 
 5 Инициализировать свой тип свойства в init.php
 

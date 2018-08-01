@@ -6,7 +6,7 @@ use CIBlock;
 use CIBlockSection;
 use Exception;
 use WebArch\BitrixCache\BitrixCache;
-use WebArch\BitrixUserPropertyType\Abstraction\IntegerDbColTypeTrait;
+use WebArch\BitrixUserPropertyType\Abstraction\DbColumnType\IntegerColTypeTrait;
 use WebArch\BitrixUserPropertyType\Abstraction\UserTypeBase;
 
 /**
@@ -24,11 +24,11 @@ use WebArch\BitrixUserPropertyType\Abstraction\UserTypeBase;
  */
 class IblockSectionLinkType extends UserTypeBase
 {
+    use IntegerColTypeTrait;
+
     const LABEL_NO_VALUE = '(ничего не выбрано)';
 
     const SETTING_IBLOCK_ID = 'IBLOCK_ID';
-
-    use IntegerDbColTypeTrait;
 
     /**
      * @inheritdoc
@@ -96,7 +96,7 @@ END;
             // 'iblockfix' => 'y',
         ];
 
-        $popupWindowParams = '/bitrix/admin/iblock_section_search.php?' . htmlentities(http_build_query($params));;
+        $popupWindowParams = '/bitrix/admin/iblock_section_search.php?' . htmlentities(http_build_query($params));
 
         $return = <<<END
             <input name="{$htmlControl['NAME']}"
@@ -111,6 +111,20 @@ END;
 END;
 
         return $return;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function getAdminListViewHtml($userField, $htmlControl)
+    {
+        //TODO Добавить гиперссылку с ID раздела для перехода к его редактированию?
+        $spanValue = self::getLinkedSectionFullName($htmlControl['VALUE']);
+
+        return <<<END
+        [{$htmlControl['VALUE']}]&nbsp;<span>{$spanValue}</span>
+END;
+
     }
 
     /**

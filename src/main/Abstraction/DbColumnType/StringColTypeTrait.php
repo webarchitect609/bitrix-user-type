@@ -1,10 +1,10 @@
 <?php
 
-namespace WebArch\BitrixUserPropertyType\Abstraction;
+namespace WebArch\BitrixUserPropertyType\Abstraction\DbColumnType;
 
-use CUserTypeInteger;
+use CUserTypeString;
 
-trait IntegerDbColTypeTrait
+trait StringColTypeTrait
 {
     /**
      * @param array $userField
@@ -16,6 +16,6 @@ trait IntegerDbColTypeTrait
     public static function getDBColumnType($userField)
     {
         /** @noinspection PhpDynamicAsStaticMethodCallInspection */
-        return CUserTypeInteger::GetDBColumnType($userField);
+        return CUserTypeString::GetDBColumnType($userField);
     }
 }

@@ -5,6 +5,9 @@ namespace WebArch\BitrixUserPropertyType\Abstraction;
 /**
  * Interface UserTypeInterface
  *
+ * Общие методы, которыми должен обладать класс своего типа пользовательского свойва.
+ *
+ *
  * @internal Все методы пришлось сделать статическими и работать только благодаря позднему статическому связыванию,
  *     т.к. Битрикс вызывает их строго статически. По-другому не получится.
  *
@@ -25,6 +28,8 @@ interface UserTypeInterface
     const BASE_TYPE_DATE = 'date';
 
     const BASE_TYPE_DATETIME = 'datetime';
+
+    const BASE_TYPE_ENUM = 'enumeration';
 
     /**
      * Максимальная разрешённая длинна уникального идентификатора типа.
@@ -112,6 +117,19 @@ interface UserTypeInterface
      * @return string HTML для вывода.
      */
     public static function getEditFormHTML($userField, $htmlControl);
+
+    /**
+     * Эта функция вызывается при выводе значения свойства в списке элементов.
+     *
+     * <p>Возвращает html для встраивания в ячейку таблицы.</p>
+     * <p>Элементы $arHtmlControl приведены к html безопасному виду.</p>
+     *
+     * @param array $arUserField Массив описывающий поле.
+     * @param array $arHtmlControl Массив управления из формы. Содержит элементы NAME и VALUE.
+     *
+     * @return string HTML для вывода.
+     */
+    public static function getAdminListViewHtml($userField, $htmlControl);
 
     /**
      * Эта функция вызывается при выводе формы настройки свойства.
