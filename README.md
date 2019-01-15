@@ -18,6 +18,21 @@
 
 `\WebArch\BitrixUserPropertyType\IblockSectionLinkType::init();`
 
+Либо воспользоваться менеджером:
+
+```php
+<?php
+
+use WebArch\BitrixUserPropertyType\HyperLinkType;
+use WebArch\BitrixUserPropertyType\IblockSectionLinkType;
+use WebArch\BitrixUserPropertyType\UserTypeManager;
+
+(new UserTypeManager([
+    HyperLinkType::class,
+    IblockSectionLinkType::class
+]))->init();
+```
+
 3 Теперь можно создавать новые пользовательские поля, выбрав свойство нового типа!
 
 
