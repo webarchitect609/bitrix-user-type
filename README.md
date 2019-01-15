@@ -26,16 +26,27 @@
 use WebArch\BitrixUserPropertyType\HyperLinkType;
 use WebArch\BitrixUserPropertyType\IblockSectionLinkType;
 use WebArch\BitrixUserPropertyType\UserTypeManager;
+use WebArch\BitrixUserPropertyType\WeekDayType;
+use WebArch\BitrixUserPropertyType\StoreListType;
 
 (new UserTypeManager([
     HyperLinkType::class,
-    IblockSectionLinkType::class
+    IblockSectionLinkType::class,
+    WeekDayType::class,
+    StoreListType::class
 ]))->init();
 ```
 
 3 Теперь можно создавать новые пользовательские поля, выбрав свойство нового типа!
 
 
+Список пользовательских свойств пакета:
+----------------------------------
+
+* "Гиперссылка". Пользовательское свойство, реализующее валидную гиперссылку. `WebArch\BitrixUserPropertyType\HyperLinkType`
+* "Привязка к разделу инфоблока(с окном поиска)". Позволяет удобно указать раздел, выбрав его из всплывающего окна. `WebArch\BitrixUserPropertyType\IblockSectionLinkType`
+* "День недели". Позволяет реализовать привязку к дню недели (ISO-8601). `WebArch\BitrixUserPropertyType\WeekDayType`
+* "Привязка к складу". Реализует привязку к складу по его XML_ID. `WebArch\BitrixUserPropertyType\StoreListType` 
 
 Как разработать свой тип свойства: 
 ----------------------------------

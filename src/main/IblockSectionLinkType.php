@@ -4,6 +4,8 @@ namespace WebArch\BitrixUserPropertyType;
 
 use CIBlock;
 use CIBlockSection;
+use Bitrix\Main\Loader;
+use Bitrix\Main\LoaderException;
 use Exception;
 use WebArch\BitrixCache\BitrixCache;
 use WebArch\BitrixUserPropertyType\Abstraction\DbColumnType\IntegerColTypeTrait;
@@ -29,6 +31,16 @@ class IblockSectionLinkType extends UserTypeBase
     const LABEL_NO_VALUE = '(ничего не выбрано)';
 
     const SETTING_IBLOCK_ID = 'IBLOCK_ID';
+
+    /**
+     * @throws LoaderException
+     */
+    public static function init()
+    {
+        if (Loader::includeModule('iblock')) {
+            parent::init();
+        }
+    }
 
     /**
      * @inheritdoc
