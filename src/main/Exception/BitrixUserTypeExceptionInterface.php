@@ -1,6 +1,6 @@
 <?php
 
-namespace WebArch\BitrixUserPropertyType;
+namespace WebArch\BitrixUserPropertyType\Exception;
 
 use Throwable;
 

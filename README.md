@@ -25,7 +25,7 @@
 
 use WebArch\BitrixUserPropertyType\HyperLinkType;
 use WebArch\BitrixUserPropertyType\IblockSectionLinkType;
-use WebArch\BitrixUserPropertyType\UserTypeManager;
+use WebArch\BitrixUserPropertyType\Utils\UserTypeManager;
 use WebArch\BitrixUserPropertyType\WeekDayType;
 use WebArch\BitrixUserPropertyType\StoreListType;
 

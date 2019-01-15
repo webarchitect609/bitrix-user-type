@@ -1,8 +1,9 @@
 <?php
 
-namespace WebArch\BitrixUserPropertyType;
+namespace WebArch\BitrixUserPropertyType\Utils;
 
 use WebArch\BitrixUserPropertyType\Abstraction\UserTypeInterface;
+use WebArch\BitrixUserPropertyType\Exception\WrongUserTypeClassException;
 
 /**
  * Class UserTypeManager
