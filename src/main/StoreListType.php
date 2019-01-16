@@ -7,7 +7,6 @@ use Bitrix\Main\Loader;
 use Bitrix\Main\LoaderException;
 use WebArch\BitrixUserPropertyType\Abstraction\DbColumnType\StringColTypeTrait;
 use WebArch\BitrixUserPropertyType\Abstraction\UserTypeBase;
-use WebArch\BitrixUserPropertyType\Abstraction\UserTypeInterface;
 
 /**
  * Class StoreListType
@@ -16,7 +15,7 @@ use WebArch\BitrixUserPropertyType\Abstraction\UserTypeInterface;
  *
  * @package Adv\AdvApplication\UserProperty
  */
-class StoreListType extends UserTypeBase implements UserTypeInterface
+class StoreListType extends UserTypeBase
 {
     use StringColTypeTrait;
 

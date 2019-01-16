@@ -6,7 +6,6 @@ use DateTime;
 use Exception;
 use WebArch\BitrixUserPropertyType\Abstraction\DbColumnType\IntegerColTypeTrait;
 use WebArch\BitrixUserPropertyType\Abstraction\UserTypeBase;
-use WebArch\BitrixUserPropertyType\Abstraction\UserTypeInterface;
 
 /**
  * Class WeekDayType
@@ -16,7 +15,7 @@ use WebArch\BitrixUserPropertyType\Abstraction\UserTypeInterface;
  *
  * @package WebArch\BitrixUserPropertyType
  */
-class WeekDayType extends UserTypeBase implements UserTypeInterface
+class WeekDayType extends UserTypeBase
 {
     use IntegerColTypeTrait;
 

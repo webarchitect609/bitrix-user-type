@@ -10,18 +10,18 @@ use WebArch\BitrixUserPropertyType\Exception\WrongUserTypeClassException;
  *
  * @package WebArch\BitrixUserPropertyType
  */
-final class UserTypeManager
+class UserTypeManager
 {
     private $classes = [];
 
     /**
      * UserPropertyManager constructor.
      *
-     * @param array|string[] $propertyList
+     * @param array|string[] $propertyClassList
      */
-    public function __construct(array $propertyList)
+    public function __construct(array $propertyClassList)
     {
-        $this->classes = $propertyList;
+        $this->classes = $propertyClassList;
     }
 
     /**
@@ -42,8 +42,9 @@ final class UserTypeManager
 
             throw new WrongUserTypeClassException(
                 \sprintf(
-                    'Class %s is not found or not implement WebArch\BitrixUserPropertyType\Abstraction\UserTypeInterface',
-                    $className
+                    'Class %s is not found or not implement %s',
+                    $className,
+                    UserTypeInterface::class
                 )
             );
         }
