@@ -77,7 +77,7 @@ class LocationType extends UserTypeBase implements UserTypeInterface
      *
      * @return array
      */
-    public static function prepareSettings($userField): array
+    public static function prepareSettings($userField)
     {
         return [
             'DEFAULT_VALUE' => (int)$userField['SETTINGS']['DEFAULT_VALUE']
@@ -92,7 +92,7 @@ class LocationType extends UserTypeBase implements UserTypeInterface
      *
      * @return string
      */
-    public static function getSettingsHTML($userField, $htmlControl, $varsFromForm): string
+    public static function getSettingsHTML($userField, $htmlControl, $varsFromForm)
     {
         $result = '';
         $value = '';
@@ -141,7 +141,7 @@ class LocationType extends UserTypeBase implements UserTypeInterface
      *
      * @return string
      */
-    public static function getFilterHTML($userField, $htmlControl): string
+    public static function getFilterHTML($userField, $htmlControl)
     {
         $replacedName = str_replace(
             [
@@ -184,7 +184,7 @@ class LocationType extends UserTypeBase implements UserTypeInterface
      * @return string
      * @throws LoaderException
      */
-    public static function getAdminListEditHTML($userField, $htmlControl): string
+    public static function getAdminListEditHTML($userField, $htmlControl)
     {
         return static::getEditFormHTML($userField, $htmlControl);
     }
@@ -196,7 +196,7 @@ class LocationType extends UserTypeBase implements UserTypeInterface
      * @return string
      * @throws LoaderException
      */
-    public static function getEditFormHTML($userField, $htmlControl): string
+    public static function getEditFormHTML($userField, $htmlControl)
     {
         $return = '&nbsp;';
         $replacedName = str_replace(
@@ -261,7 +261,7 @@ class LocationType extends UserTypeBase implements UserTypeInterface
      * @return string
      * @throws LoaderException
      */
-    public static function getAdminListViewHTML($userField, $htmlControl): string
+    public static function getAdminListViewHTML($userField, $htmlControl)
     {
         if (!empty($htmlControl['VALUE'])) {
             Loader::includeModule('sale');
@@ -280,7 +280,7 @@ class LocationType extends UserTypeBase implements UserTypeInterface
      *
      * @throws LoaderException
      */
-    public static function getAdminListEditHTMLMulty($userField, $htmlControl): string
+    public static function getAdminListEditHTMLMulty($userField, $htmlControl)
     {
         return static::getEditFormHTMLMulty($userField, $htmlControl);
     }
@@ -293,7 +293,7 @@ class LocationType extends UserTypeBase implements UserTypeInterface
      *
      * @throws LoaderException
      */
-    public static function getEditFormHTMLMulty($userField, $htmlControl): string
+    public static function getEditFormHTMLMulty($userField, $htmlControl)
     {
         $return = '&nbsp;';
         if ($userField['EDIT_IN_LIST'] === 'Y') {
@@ -456,7 +456,7 @@ class LocationType extends UserTypeBase implements UserTypeInterface
      *
      * @throws LoaderException
      */
-    public static function getAdminListViewHTMLMulty($userField, $htmlControl): string
+    public static function getAdminListViewHTMLMulty($userField, $htmlControl)
     {
         if (!empty($htmlControl['VALUE'])) {
             Loader::includeModule('sale');
@@ -481,7 +481,7 @@ class LocationType extends UserTypeBase implements UserTypeInterface
      * @return string
      * @throws LoaderException
      */
-    public static function onSearchIndex($userField): string
+    public static function onSearchIndex($userField)
     {
         if (\is_array($userField['VALUE'])) {
             return static::getAdminListViewHTMLMulty($userField, ['VALUE' => $userField['VALUE']]);
