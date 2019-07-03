@@ -46,7 +46,9 @@ use WebArch\BitrixUserPropertyType\StoreListType;
 * "Гиперссылка". Пользовательское свойство, реализующее валидную гиперссылку. `WebArch\BitrixUserPropertyType\HyperLinkType`
 * "Привязка к разделу инфоблока(с окном поиска)". Позволяет удобно указать раздел, выбрав его из всплывающего окна. `WebArch\BitrixUserPropertyType\IblockSectionLinkType`
 * "День недели". Позволяет реализовать привязку к дню недели (ISO-8601). `WebArch\BitrixUserPropertyType\WeekDayType`
-* "Привязка к складу". Реализует привязку к складу по его XML_ID. `WebArch\BitrixUserPropertyType\StoreListType` 
+* "Привязка к складу". Реализует привязку к складу по его XML_ID. `WebArch\BitrixUserPropertyType\StoreListType`
+* "Привязка к местоположению". Реализует привязку к местоположению Bitrix по его коду.
+ `WebArch\BitrixUserPropertyType\LocationType`
 
 Как разработать свой тип свойства: 
 ----------------------------------
