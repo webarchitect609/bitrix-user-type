@@ -91,13 +91,13 @@ interface UserTypeInterface
      * <p>Значения множественных свойств хранятся не в строках, а столбиках (как в инфоблоках)
      * и тип такого поля в БД всегда text.</p>
      *
-     * @internal Метод обязательно должен быть статическим, т.к. в \CAllUserTypeManager::GetDBColumnType он вызывается
-     *     только таким способом. При создании своих типов рекомендуется использовать готовые реализации из
-     *     \CUserTypeInteger::GetDBColumnType , \CUserTypeString::GetDBColumnType и т.п.
-     *
      * @param array $userField Массив описывающий поле
      *
      * @return string
+     *
+     * @internal Метод обязательно должен быть статическим, т.к. в \CAllUserTypeManager::GetDBColumnType он вызывается
+     *     только таким способом. При создании своих типов рекомендуется использовать готовые реализации из
+     *     \CUserTypeInteger::GetDBColumnType , \CUserTypeString::GetDBColumnType и т.п.
      *
      * @see \CUserTypeInteger::GetDBColumnType
      * @see \CUserTypeString::GetDBColumnType
@@ -124,8 +124,8 @@ interface UserTypeInterface
      * <p>Возвращает html для встраивания в ячейку таблицы.</p>
      * <p>Элементы $arHtmlControl приведены к html безопасному виду.</p>
      *
-     * @param array $arUserField Массив описывающий поле.
-     * @param array $arHtmlControl Массив управления из формы. Содержит элементы NAME и VALUE.
+     * @param array $userField Массив описывающий поле.
+     * @param array $htmlControl Массив управления из формы. Содержит элементы NAME и VALUE.
      *
      * @return string HTML для вывода.
      */
@@ -157,4 +157,5 @@ interface UserTypeInterface
      * @return array Массив который в дальнейшем будет сериализован и сохранен в БД.
      */
     public static function prepareSettings($userField);
+
 }

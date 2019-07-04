@@ -65,7 +65,6 @@ class LocationType extends UserTypeBase implements UserTypeInterface
             case 'oracle':
                 return 'varchar(20 char)';
             case 'mssql':
-                return 'varchar(20)';
             case 'mysql':
             default:
                 return 'varchar(20)';

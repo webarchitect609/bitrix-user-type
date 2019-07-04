@@ -3,6 +3,7 @@
 namespace WebArch\BitrixUserPropertyType;
 
 use Bitrix\Catalog\StoreTable;
+use Bitrix\Main\ArgumentException;
 use Bitrix\Main\Loader;
 use Bitrix\Main\LoaderException;
 use WebArch\BitrixUserPropertyType\Abstraction\DbColumnType\StringColTypeTrait;
@@ -105,6 +106,7 @@ class StoreListType extends UserTypeBase
      * @param $userField
      * @param $htmlControl
      *
+     * @throws ArgumentException
      * @return string
      */
     public static function getFilterHTML($userField, $htmlControl)
@@ -116,6 +118,7 @@ class StoreListType extends UserTypeBase
      * @param      $name
      * @param null $current
      *
+     * @throws ArgumentException
      * @return string
      */
     protected static function getStoreSelectHTML($name, $current = null)
@@ -134,6 +137,7 @@ class StoreListType extends UserTypeBase
     }
 
     /**
+     * @throws ArgumentException
      * @return array
      */
     protected static function getStoreList()
@@ -159,11 +163,11 @@ class StoreListType extends UserTypeBase
         return self::$stores;
     }
 
-
     /**
      * @param $userField
      * @param $htmlControl
      *
+     * @throws ArgumentException
      * @return string
      */
     public static function getAdminListEditHTML($userField, $htmlControl)
@@ -175,6 +179,7 @@ class StoreListType extends UserTypeBase
      * @param $userField
      * @param $htmlControl
      *
+     * @throws ArgumentException
      * @return string
      */
     public static function getEditFormHTML($userField, $htmlControl)
@@ -197,6 +202,7 @@ class StoreListType extends UserTypeBase
      * @param $userField
      * @param $htmlControl
      *
+     * @throws ArgumentException
      * @return string
      */
     public static function getAdminListViewHTML($userField, $htmlControl)
@@ -211,6 +217,7 @@ class StoreListType extends UserTypeBase
     /**
      * @param $xmlId
      *
+     * @throws ArgumentException
      * @return array
      */
     protected static function getStoreByXmlId($xmlId)
@@ -226,6 +233,7 @@ class StoreListType extends UserTypeBase
      * @param $userField
      * @param $htmlControl
      *
+     * @throws ArgumentException
      * @return mixed
      */
     public static function getAdminListEditHTMLMulty($userField, $htmlControl)
@@ -237,6 +245,7 @@ class StoreListType extends UserTypeBase
      * @param $userField
      * @param $htmlControl
      *
+     * @throws ArgumentException
      * @return string
      */
     public static function getEditFormHTMLMulty($userField, $htmlControl)
@@ -271,6 +280,7 @@ class StoreListType extends UserTypeBase
      * @param $userField
      * @param $htmlControl
      *
+     * @throws ArgumentException
      * @return string
      */
     public static function getAdminListViewHTMLMulty($userField, $htmlControl)
@@ -295,6 +305,7 @@ class StoreListType extends UserTypeBase
     /**
      * @param $userField
      *
+     * @throws ArgumentException
      * @return string
      */
     public static function onSearchIndex($userField)

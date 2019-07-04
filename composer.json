@@ -20,7 +20,8 @@
   ],
   "require": {
     "php": ">=5.5",
-    "webarchitect609/bitrix-cache": "^1.0"
+    "webarchitect609/bitrix-cache": "^1.0",
+    "ext-mbstring": "*"
   },
   "autoload": {
     "psr-4": {
