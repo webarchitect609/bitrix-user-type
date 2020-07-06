@@ -2,12 +2,12 @@
 
 namespace WebArch\BitrixUserPropertyType;
 
-use CIBlock;
-use CIBlockSection;
 use Bitrix\Main\Loader;
 use Bitrix\Main\LoaderException;
+use CIBlock;
+use CIBlockSection;
 use Exception;
-use WebArch\BitrixCache\BitrixCache;
+use WebArch\BitrixCache\Cache;
 use WebArch\BitrixUserPropertyType\Abstraction\DbColumnType\IntegerColTypeTrait;
 use WebArch\BitrixUserPropertyType\Abstraction\UserTypeBase;
 
@@ -60,6 +60,7 @@ class IblockSectionLinkType extends UserTypeBase
 
     /**
      * @inheritdoc
+     * @throws Exception
      */
     public static function getSettingsHTML($userField, $htmlControl, $isVarsFromForm)
     {
@@ -89,6 +90,7 @@ END;
 
     /**
      * @inheritdoc
+     * @throws Exception
      */
     public static function getEditFormHTML($userField, $htmlControl)
     {
@@ -110,7 +112,9 @@ END;
 
         $popupWindowParams = '/bitrix/admin/iblock_section_search.php?' . htmlentities(http_build_query($params));
 
-        $return = <<<END
+        /** @noinspection JSUnresolvedVariable */
+        /** @noinspection JSUnresolvedFunction */
+        return <<<END
             <input name="{$htmlControl['NAME']}"
                    id="{$name}[{$key}]"
                    value="{$htmlControl['VALUE']}"
@@ -121,12 +125,11 @@ END;
                type="button">&nbsp;
             <span id="{$spanId}">{$spanValue}</span>
 END;
-
-        return $return;
     }
 
     /**
      * @inheritdoc
+     * @throws Exception
      */
     public static function getAdminListViewHtml($userField, $htmlControl)
     {
@@ -144,17 +147,17 @@ END;
      *
      * @param int $sectionId
      *
-     * @return string
      * @throws Exception
+     * @return string
      */
     private static function getLinkedSectionFullName($sectionId)
     {
-        $bitrixCache = new BitrixCache();
+        $cache = Cache::create();
 
-        $doGetLinkedSectionFullName = function () use ($sectionId, $bitrixCache) {
+        $doGetLinkedSectionFullName = function () use ($sectionId, $cache) {
 
             if ($sectionId <= 0) {
-                $bitrixCache->abortCache();
+                $cache->abort();
 
                 return self::LABEL_NO_VALUE;
             }
@@ -162,13 +165,13 @@ END;
             $section = CIBlockSection::GetList([], ['=ID' => $sectionId], false, ['IBLOCK_ID'], ['nTopCount' => 1])
                                      ->Fetch();
             if (false == $section) {
-                $bitrixCache->abortCache();
+                $cache->abort();
 
                 return self::LABEL_NO_VALUE;
             }
 
             //TODO Придумать, как заставить работать такое тегирование
-            // $bitrixCache->withIblockTag((int)$section['IBLOCK_ID']);
+            // $cache->withIblockTag((int)$section['IBLOCK_ID']);
 
             $path = [];
             $dbChain = CIBlockSection::GetNavChain($section['IBLOCK_ID'], $sectionId, ['NAME']);
@@ -179,8 +182,8 @@ END;
             return implode(' / ', $path);
         };
 
-        $result = $bitrixCache->withId(__METHOD__ . '_' . $sectionId)
-                              ->resultOf($doGetLinkedSectionFullName);
+        $result = $cache->setKey(__METHOD__ . '_' . $sectionId)
+                        ->callback($doGetLinkedSectionFullName);
 
         return trim($result['result']);
     }
@@ -188,8 +191,8 @@ END;
     /**
      * @param $currentValue
      *
-     * @return string
      * @throws Exception
+     * @return string
      */
     private static function getIblockOptionList($currentValue)
     {
@@ -209,8 +212,8 @@ END;
     }
 
     /**
-     * @return array
      * @throws Exception
+     * @return array
      */
     private static function getIblockList()
     {
@@ -229,7 +232,8 @@ END;
             return $iblockList;
         };
 
-        return (new BitrixCache())->withId(__METHOD__)
-                                  ->resultOf($doGetIblockList);
+        return Cache::create()
+                    ->setKey(__METHOD__)
+                    ->callback($doGetIblockList);
     }
 }
