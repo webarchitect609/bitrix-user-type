@@ -26,4 +26,8 @@ interface ConvertibleValueInterface
      * @return array
      */
     public static function onAfterFetch($userField, $rawValue);
+
+    /**
+     * Рекомендуется также определить публичный метод createValue, который позволит заполнять значение из php-кода.
+     */
 }

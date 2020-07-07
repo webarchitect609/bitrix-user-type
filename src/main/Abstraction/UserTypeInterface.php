@@ -157,5 +157,4 @@ interface UserTypeInterface
      * @return array Массив который в дальнейшем будет сериализован и сохранен в БД.
      */
     public static function prepareSettings($userField);
-
 }

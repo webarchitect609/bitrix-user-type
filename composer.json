@@ -21,7 +21,8 @@
   "require": {
     "php": "^7.2",
     "webarchitect609/bitrix-cache": "^1.4 || ^2.0",
-    "ext-mbstring": "*"
+    "ext-mbstring": "*",
+    "anahkiasen/html-object": "^1.4"
   },
   "autoload": {
     "psr-4": {
