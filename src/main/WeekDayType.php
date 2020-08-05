@@ -4,8 +4,13 @@ namespace WebArch\BitrixUserPropertyType;
 
 use DateTime;
 use Exception;
+use WebArch\BitrixUserPropertyType\Abstraction\Custom\AdminListViewMultyInterface;
 use WebArch\BitrixUserPropertyType\Abstraction\DbColumnType\IntegerColTypeTrait;
 use WebArch\BitrixUserPropertyType\Abstraction\UserTypeBase;
+use WebArch\BitrixUserPropertyType\Enum\WeekDayISO8601;
+use function FormatDate;
+use function in_array;
+use function is_array;
 
 /**
  * Class WeekDayType
@@ -15,7 +20,7 @@ use WebArch\BitrixUserPropertyType\Abstraction\UserTypeBase;
  *
  * @package WebArch\BitrixUserPropertyType
  */
-class WeekDayType extends UserTypeBase
+class WeekDayType extends UserTypeBase implements AdminListViewMultyInterface
 {
     use IntegerColTypeTrait;
 
@@ -75,7 +80,7 @@ class WeekDayType extends UserTypeBase
         $value = '';
         if ($varsFromForm) {
             $value = $GLOBALS[$htmlControl['NAME']]['DEFAULT_VALUE'];
-        } elseif (\is_array($userField)) {
+        } elseif (is_array($userField)) {
             $value = $userField['SETTINGS']['DEFAULT_VALUE'];
         }
 
@@ -95,9 +100,9 @@ class WeekDayType extends UserTypeBase
      * @param $userField
      * @param $htmlControl
      *
+     * @throws Exception
      * @return string
      *
-     * @throws Exception
      */
     public static function getFilterHTML($userField, $htmlControl)
     {
@@ -109,14 +114,14 @@ class WeekDayType extends UserTypeBase
      * @param null $current
      * @param bool $multiple
      *
+     * @throws Exception
      * @return string
      *
-     * @throws Exception
      */
     protected static function getSelectHTML($name, $current = null, $multiple = false)
     {
         if (empty(static::$days)) {
-            for ($i = 1; $i < 8; $i++) {
+            for ($i = WeekDayISO8601::MONDAY; $i <= WeekDayISO8601::SUNDAY; $i++) {
                 static::$days[$i] = static::getDay($i);
             }
         }
@@ -125,9 +130,9 @@ class WeekDayType extends UserTypeBase
         foreach (static::$days as $i => $day) {
             $selected = false;
             if (null !== $current) {
-                if (\is_array($current)) {
+                if (is_array($current)) {
                     /** @noinspection TypeUnsafeArraySearchInspection */
-                    $selected = \in_array($i, $current);
+                    $selected = in_array($i, $current);
                 } else {
                     $selected = $i === (int)$current;
                 }
@@ -143,24 +148,24 @@ class WeekDayType extends UserTypeBase
     /**
      * @param int $value
      *
+     * @throws Exception
      * @return string
      *
-     * @throws Exception
      */
     protected static function getDay($value)
     {
         $dayOfWeek = date('N');
 
-        return \FormatDate('l', strtotime(($value - $dayOfWeek) . ' day', (new DateTime())->getTimestamp()));
+        return FormatDate('l', strtotime(($value - $dayOfWeek) . ' day', (new DateTime())->getTimestamp()));
     }
 
-    /** @noinspection PhpUnusedParameterInspection
+    /**
      *
      * @param $userField
      * @param $htmlControl
      *
-     * @return string
      * @throws Exception
+     * @return string
      */
     public static function getAdminListEditHTML($userField, $htmlControl)
     {
@@ -171,9 +176,9 @@ class WeekDayType extends UserTypeBase
      * @param array $userField
      * @param array $htmlControl
      *
+     * @throws Exception
      * @return string
      *
-     * @throws Exception
      */
     public static function getEditFormHTML($userField, $htmlControl)
     {
@@ -195,9 +200,9 @@ class WeekDayType extends UserTypeBase
      * @param $userField
      * @param $htmlControl
      *
+     * @throws Exception
      * @return string
      *
-     * @throws Exception
      */
     public static function getAdminListViewHTML($userField, $htmlControl)
     {
@@ -212,9 +217,9 @@ class WeekDayType extends UserTypeBase
      * @param $userField
      * @param $htmlControl
      *
+     * @throws Exception
      * @return string
      *
-     * @throws Exception
      */
     public static function getAdminListEditHTMLMulty($userField, $htmlControl)
     {
@@ -225,9 +230,9 @@ class WeekDayType extends UserTypeBase
      * @param $userField
      * @param $htmlControl
      *
+     * @throws Exception
      * @return string
      *
-     * @throws Exception
      */
     public static function getEditFormHTMLMulty($userField, $htmlControl)
     {
@@ -247,16 +252,16 @@ class WeekDayType extends UserTypeBase
      * @param $userField
      * @param $htmlControl
      *
+     * @throws Exception
      * @return string
      *
-     * @throws Exception
      */
     public static function getAdminListViewHTMLMulty($userField, $htmlControl)
     {
         if (!empty($htmlControl['VALUE'])) {
             $arPrint = [];
 
-            if (\is_array($htmlControl['VALUE']) && !empty($htmlControl['VALUE'])) {
+            if (is_array($htmlControl['VALUE']) && !empty($htmlControl['VALUE'])) {
                 foreach ($htmlControl['VALUE'] as $val) {
                     if (!empty($val)) {
                         $arPrint[] = self::getDay($val);
@@ -273,13 +278,13 @@ class WeekDayType extends UserTypeBase
     /**
      * @param $userField
      *
+     * @throws Exception
      * @return string
      *
-     * @throws Exception
      */
     public static function onSearchIndex($userField)
     {
-        if (\is_array($userField['VALUE'])) {
+        if (is_array($userField['VALUE'])) {
             return static::getAdminListViewHTMLMulty($userField, ['VALUE' => $userField['VALUE']]);
         }
 

@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.6.1
+
+### Добавлено
+- Константы дней недели по ISO-8601 `\WebArch\BitrixUserPropertyType\Enum\WeekDayISO8601`
+
 ## 0.6.0
 
 Добавлен новый тип "Время(без даты)"
