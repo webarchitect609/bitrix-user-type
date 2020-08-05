@@ -2,13 +2,18 @@
 
 namespace WebArch\BitrixUserPropertyType;
 
+use Bitrix\Main\ORM\Fields\Field;
+use Bitrix\Main\SystemException;
 use HtmlObject\Element;
 use HtmlObject\Input;
+use WebArch\BitrixOrmTools\Field\TimeField;
 use WebArch\BitrixUserPropertyType\Abstraction\Custom\AdminListEditInterface;
 use WebArch\BitrixUserPropertyType\Abstraction\Custom\CheckableValueInterface;
 use WebArch\BitrixUserPropertyType\Abstraction\Custom\ConvertibleValueInterface;
+use WebArch\BitrixUserPropertyType\Abstraction\Custom\EntityFieldAwareInterface;
 use WebArch\BitrixUserPropertyType\Abstraction\UserTypeBase;
 use WebArch\BitrixUserPropertyType\Abstraction\UserTypeInterface;
+use WebArch\BitrixUserPropertyType\Exception\InvalidArgumentException;
 use WebArch\BitrixUserPropertyType\Exception\LogicException;
 use WebArch\BitrixUserPropertyType\Utils\HtmlHelper;
 
@@ -19,7 +24,7 @@ use WebArch\BitrixUserPropertyType\Utils\HtmlHelper;
  *
  * @package WebArch\BitrixUserPropertyType
  */
-class TimeType extends UserTypeBase implements ConvertibleValueInterface, CheckableValueInterface, AdminListEditInterface
+class TimeType extends UserTypeBase implements ConvertibleValueInterface, CheckableValueInterface, AdminListEditInterface, EntityFieldAwareInterface
 {
     /**
      * Признак отрицательной величины. Может быть пустым(время положительное) или содержать знак "-"(время
@@ -37,11 +42,11 @@ class TimeType extends UserTypeBase implements ConvertibleValueInterface, Checka
 
     private const NUMBER_FORMAT = '%02d';
 
-    private const SETTING_DEFAULT_VALUE = 'DEFAULT_VALUE';
+    public const SETTING_DEFAULT_VALUE = 'DEFAULT_VALUE';
 
-    private const SETTING_IS_TIME_OF_DAY = 'IS_TIME_OF_DAY';
+    public const SETTING_IS_TIME_OF_DAY = 'IS_TIME_OF_DAY';
 
-    private const SETTING_REQUIRED = 'REQUIRED';
+    public const SETTING_REQUIRED = 'REQUIRED';
 
     private const NEGATIVE_SIGN = '-';
 
@@ -53,6 +58,10 @@ class TimeType extends UserTypeBase implements ConvertibleValueInterface, Checka
      * @link https://dev.mysql.com/doc/refman/5.7/en/time.html
      */
     private const HOUR_MAX = 838;
+
+    private const MINUTE_MAX = 59;
+
+    private const SECOND_MAX = 59;
 
     /**
      * Нельзя писать отрицательные часы, т.к. для этого есть специальный чекбокс.
@@ -77,7 +86,7 @@ class TimeType extends UserTypeBase implements ConvertibleValueInterface, Checka
      */
     public static function getBaseType()
     {
-        return UserTypeInterface::BASE_TYPE_INT;
+        return UserTypeInterface::BASE_TYPE_STRING;
     }
 
     /**
@@ -369,7 +378,7 @@ TXT;
                 'Минута',
                 $htmlHelper->getOptionListWithNumbers(
                     0,
-                    59,
+                    self::MINUTE_MAX,
                     $htmlControl['VALUE'][self::VALUE_MINUTE],
                     null,
                     1,
@@ -397,7 +406,7 @@ TXT;
                 'Секунда',
                 $htmlHelper->getOptionListWithNumbers(
                     0,
-                    59,
+                    self::SECOND_MAX,
                     $htmlControl['VALUE'][self::VALUE_SECOND],
                     null,
                     1,
@@ -427,11 +436,9 @@ TXT;
     public static function onAfterFetch($userField, $rawValue)
     {
         if (is_null($rawValue['VALUE']) || false === $rawValue['VALUE'] || trim($rawValue['VALUE']) == '') {
-            return self::createValue(null, null, null, false);
-        } elseif (is_string($rawValue['VALUE'])) {
-            [$hour, $minute, $second] = explode(self::S, $rawValue['VALUE']);
-
-            return self::createValue(abs($hour), $minute, $second, $hour < 0);
+            return null;
+        } elseif (is_string($rawValue['VALUE']) || is_numeric($rawValue['VALUE'])) {
+            return self::parseValue($rawValue['VALUE']);
         }
 
         throw new LogicException(
@@ -526,22 +533,127 @@ TXT;
     }
 
     /**
-     * @param null|int $hour
-     * @param null|int $minute
-     * @param null|int $second
+     * @param int $hour
+     * @param int $minute
+     * @param int $second
      *
      * @param bool $negative
      *
-     * @return int[]
+     * @return string[]
      */
-    public static function createValue(?int $hour, ?int $minute, ?int $second, bool $negative = false): array
+    public static function createValue(int $hour, int $minute, int $second = 0, bool $negative = false): array
     {
+        if ($minute > self::MINUTE_MAX || $second > self::SECOND_MAX) {
+            /**
+             * Invalid value is interpreted as '00:00:00'
+             */
+            $hour = $minute = $second = 0;
+            $negative = false;
+        } elseif (abs($hour) > self::HOUR_MAX) {
+            /**
+             * Outside value match closest endpoint of the range.
+             * '-850:00:00' and '850:00:00' are converted to '-838:59:59' and '838:59:59'.
+             */
+            $hour = self::HOUR_MAX;
+            $minute = self::MINUTE_MAX;
+            $second = self::SECOND_MAX;
+        }
+
         return [
             self::VALUE_NEGATIVE => $negative ? self::NEGATIVE_SIGN : '',
-            self::VALUE_HOUR     => is_null($hour) ? '' : sprintf(self::NUMBER_FORMAT, $hour),
-            self::VALUE_MINUTE   => is_null($minute) ? '' : sprintf(self::NUMBER_FORMAT, $minute),
-            self::VALUE_SECOND   => is_null($second) ? '' : sprintf(self::NUMBER_FORMAT, $second),
+            self::VALUE_HOUR     => sprintf(self::NUMBER_FORMAT, abs($hour)),
+            self::VALUE_MINUTE   => sprintf(self::NUMBER_FORMAT, abs($minute)),
+            self::VALUE_SECOND   => sprintf(self::NUMBER_FORMAT, abs($second)),
         ];
+    }
+
+    /**
+     * Формирует строку со временем по отдельным компонентам.
+     *
+     * @param int $hour
+     * @param int $minute
+     * @param int $second
+     * @param bool $negative
+     *
+     * @return string
+     */
+    public static function createValueString(int $hour, int $minute, int $second, bool $negative = false): string
+    {
+        return self::toString(self::createValue($hour, $minute, $second, $negative));
+    }
+
+    /**
+     * Разбирает строку времени на отдельные компоненты.
+     *
+     * @param string|int|float $rawValue Значение в формате 000:00:00 или 00:00:00 или 00:00 или 0000 или 00 или 0,
+     *     которое также может быть и отрицательным.
+     *
+     * @return string[] [(string)$negative, (string)$hour, (string)$minute, (string)$second] Если время
+     *     отрицательное, то час будет меньше нуля.
+     *
+     * TODO Добавить поддержку (float)$second.
+     */
+    public static function parseValue($rawValue): array
+    {
+        if (!is_string($rawValue) && !is_int($rawValue) && !is_float($rawValue) && !is_numeric($rawValue)) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Raw value type must be either string or integer or float, but %s is given.',
+                    is_object($rawValue) ? get_class($rawValue) : gettype($rawValue)
+                )
+            );
+        }
+        /**
+         * Numeric variations.
+         */
+        if (is_numeric($rawValue)) {
+            /**
+             * '12' and 12 are interpreted as '00:00:12'
+             */
+            $absRawValue = abs($rawValue);
+            if ($absRawValue >= 0 && $absRawValue <= self::SECOND_MAX) {
+                return self::createValue(0, 0, (int)$absRawValue, $rawValue < 0);
+            }
+            /**
+             * '1112' and 1112 are interpreted as '00:11:12'
+             */
+            $seconds = $absRawValue % 100;
+            if (
+                $absRawValue >= 100
+                && $absRawValue <= (self::MINUTE_MAX * 100 + self::SECOND_MAX)
+                && $seconds <= self::SECOND_MAX
+            ) {
+                return self::createValue(0, (int)(($absRawValue - $seconds) * 0.01), $seconds, $rawValue < 0);
+            }
+
+            /**
+             * Invalid value.
+             */
+            return self::createValue(0, 0, 0);
+        }
+        /**
+         * Non-numeric variations
+         */
+        [$hour, $minute, $second] = explode(self::S, $rawValue);
+        $hour = (int)$hour;
+        $minute = (int)$minute;
+        /**
+         * '11:22' is interpreted as '11:22:00'
+         */
+        if (is_null($second)) {
+            return self::createValue($hour, $minute, 0, $hour < 0);
+        }
+        /**
+         * Regular format.
+         */
+        if (is_numeric($second)) {
+            return self::createValue($hour, $minute, $second, $hour < 0);
+        }
+
+        /**
+         * Invalid value.
+         */
+        return self::createValue(0, 0, 0);
     }
 
     /**
@@ -549,7 +661,7 @@ TXT;
      *
      * @return string|null
      */
-    private static function toString($value): ?string
+    public static function toString($value): ?string
     {
         if (
             is_array($value)
@@ -569,5 +681,14 @@ TXT;
         }
 
         return null;
+    }
+
+    /**
+     * @inheritDoc
+     * @throws SystemException
+     */
+    public static function getEntityField(string $name, array $parameters): Field
+    {
+        return (new TimeField($name));
     }
 }

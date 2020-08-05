@@ -23,7 +23,7 @@ interface ConvertibleValueInterface
      * @param array $userField Массив описывающий поле.
      * @param array $rawValue ['VALUE' => <актуальное значение>]
      *
-     * @return array
+     * @return null|mixed null для случая, когда значение поля не задано.
      */
     public static function onAfterFetch($userField, $rawValue);
 

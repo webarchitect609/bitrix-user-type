@@ -11,5 +11,4 @@ use RuntimeException;
  */
 class WrongUserTypeClassException extends RuntimeException implements BitrixUserTypeExceptionInterface
 {
-
 }

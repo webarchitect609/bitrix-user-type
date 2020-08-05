@@ -20,9 +20,10 @@
   ],
   "require": {
     "php": "^7.2",
-    "webarchitect609/bitrix-cache": "^1.4 || ^2.0",
+    "webarchitect609/bitrix-cache": "^1.6 || ^2.0",
     "ext-mbstring": "*",
-    "anahkiasen/html-object": "^1.4"
+    "anahkiasen/html-object": "^1.4",
+    "webarchitect609/bitrix-orm-tools": "^2.1"
   },
   "autoload": {
     "psr-4": {

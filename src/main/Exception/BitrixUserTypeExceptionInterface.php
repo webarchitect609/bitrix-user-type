@@ -11,5 +11,4 @@ use Throwable;
  */
 interface BitrixUserTypeExceptionInterface extends Throwable
 {
-
 }
