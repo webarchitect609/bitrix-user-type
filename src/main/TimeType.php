@@ -2,6 +2,7 @@
 
 namespace WebArch\BitrixUserPropertyType;
 
+use Bitrix\Main\Entity\StringField;
 use Bitrix\Main\ORM\Fields\Field;
 use Bitrix\Main\SystemException;
 use HtmlObject\Element;
@@ -689,6 +690,13 @@ TXT;
      */
     public static function getEntityField(string $name, array $parameters): Field
     {
-        return (new TimeField($name));
+        /**
+         * В админке надо "притворяться мебелью", чтобы продолжало работать.
+         */
+        if (defined('ADMIN_SECTION')) {
+            return new StringField($name, $parameters);
+        } else {
+            return (new TimeField($name));
+        }
     }
 }
