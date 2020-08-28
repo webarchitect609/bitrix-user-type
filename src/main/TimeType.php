@@ -693,7 +693,7 @@ TXT;
         /**
          * В админке надо "притворяться мебелью", чтобы продолжало работать.
          */
-        if (defined('ADMIN_SECTION')) {
+        if (defined('ADMIN_SECTION') && ADMIN_SECTION === true) {
             return new StringField($name, $parameters);
         } else {
             return (new TimeField($name));
