@@ -592,7 +592,7 @@ TXT;
      * @return string[] [(string)$negative, (string)$hour, (string)$minute, (string)$second] Если время
      *     отрицательное, то час будет меньше нуля.
      *
-     * TODO Добавить поддержку (float)$second.
+     * TODO Добавить поддержку (float)$second( т.е. 000:00:00.000 ).
      */
     public static function parseValue($rawValue): array
     {
@@ -671,14 +671,12 @@ TXT;
             && trim($value[self::VALUE_MINUTE]) != ''
             && trim($value[self::VALUE_SECOND]) != ''
         ) {
-            /**
-             * Всеми другими методами должно гарантироваться, что соблюдается строгий порядок следования элементов:
-             *  - negative
-             *  - hour
-             *  - minute
-             *  - second
-             */
-            return array_shift($value) . implode(self::S, $value);
+            return $value[self::VALUE_NEGATIVE]
+                . sprintf(self::NUMBER_FORMAT, abs($value[self::VALUE_HOUR]))
+                . self::S
+                . sprintf(self::NUMBER_FORMAT, abs($value[self::VALUE_MINUTE]))
+                . self::S
+                . sprintf(self::NUMBER_FORMAT, abs($value[self::VALUE_SECOND]));
         }
 
         return null;
