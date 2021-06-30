@@ -239,7 +239,10 @@ class WeekDayType extends UserTypeBase implements AdminListViewMultyInterface
         $return = '&nbsp;';
         if ($userField['EDIT_IN_LIST'] === 'Y') {
             $return = '<table id="table_' . $userField['FIELD_NAME'] . '">
-                <tr><td>' . self::getSelectHTML($htmlControl['NAME'], $htmlControl['VALUE'], true) . '</td></tr>
+                <tr><td>' .
+                    '<input type="hidden" name="' . $htmlControl['NAME'] . '" value="">' .
+                    self::getSelectHTML($htmlControl['NAME'], $htmlControl['VALUE'], true) .
+                '</td></tr>
             </table>';
         } elseif (!empty($htmlControl['VALUE'])) {
             $return = static::getAdminListViewHTMLMulty($userField, $htmlControl);
