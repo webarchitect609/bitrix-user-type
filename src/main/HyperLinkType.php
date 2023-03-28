@@ -2,6 +2,7 @@
 
 namespace WebArch\BitrixUserPropertyType;
 
+use WebArch\BitrixUserPropertyType\Abstraction\Custom\ArrayForSingleValueAwareInterface;
 use WebArch\BitrixUserPropertyType\Abstraction\Custom\CheckableValueInterface;
 use WebArch\BitrixUserPropertyType\Abstraction\Custom\ConvertibleValueInterface;
 use WebArch\BitrixUserPropertyType\Abstraction\DbColumnType\StringColTypeTrait;
@@ -14,7 +15,7 @@ use WebArch\BitrixUserPropertyType\Abstraction\UserTypeBase;
  * TODO Реализовать и протестировать поддержку множественного режима
  * TODO Реализовать сортировку для множественного режима.
  */
-class HyperLinkType extends UserTypeBase implements ConvertibleValueInterface, CheckableValueInterface
+class HyperLinkType extends UserTypeBase implements ConvertibleValueInterface, CheckableValueInterface, ArrayForSingleValueAwareInterface
 {
     use StringColTypeTrait;
 
@@ -265,4 +266,11 @@ END;
         return [];
     }
 
+    /**
+     * @inheritdoc
+     */
+    public static function canUseArrayValueForSingleField(): bool
+    {
+        return true;
+    }
 }

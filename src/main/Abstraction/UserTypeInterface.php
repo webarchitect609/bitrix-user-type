@@ -1,5 +1,7 @@
 <?php
 
+/** @noinspection PhpUnused */
+
 namespace WebArch\BitrixUserPropertyType\Abstraction;
 
 /**

@@ -2,6 +2,8 @@
 
 namespace WebArch\BitrixUserPropertyType\Abstraction;
 
+use Bitrix\Main\EventManager;
+
 abstract class UserTypeBase implements UserTypeInterface
 {
     /**
@@ -9,12 +11,14 @@ abstract class UserTypeBase implements UserTypeInterface
      */
     public static function init()
     {
-        AddEventHandler(
-            'main',
-            'OnUserTypeBuildList',
-            [static::class, 'getUserTypeDescription'],
-            99999
-        );
+        EventManager::getInstance()
+                    ->addEventHandler(
+                        'main',
+                        'OnUserTypeBuildList',
+                        [static::class, 'getUserTypeDescription'],
+                        false,
+                        99999
+                    );
     }
 
     /**
@@ -67,7 +71,7 @@ abstract class UserTypeBase implements UserTypeInterface
      * Возвращает массив, описывающий ошибку.
      *
      * @param array $userField Массив описывающий поле.
-     * @param $errorMessage
+     * @param       $errorMessage
      *
      * @return array [ 'id' => $userField['FIELD_NAME'], 'text' => $errorMessage]
      */
@@ -82,5 +86,4 @@ abstract class UserTypeBase implements UserTypeInterface
             'text' => trim($errorMessage),
         ];
     }
-
 }

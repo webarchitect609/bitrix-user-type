@@ -9,6 +9,7 @@ use HtmlObject\Element;
 use HtmlObject\Input;
 use WebArch\BitrixOrmTools\Field\TimeField;
 use WebArch\BitrixUserPropertyType\Abstraction\Custom\AdminListEditInterface;
+use WebArch\BitrixUserPropertyType\Abstraction\Custom\ArrayForSingleValueAwareInterface;
 use WebArch\BitrixUserPropertyType\Abstraction\Custom\CheckableValueInterface;
 use WebArch\BitrixUserPropertyType\Abstraction\Custom\ConvertibleValueInterface;
 use WebArch\BitrixUserPropertyType\Abstraction\Custom\EntityFieldAwareInterface;
@@ -25,7 +26,7 @@ use WebArch\BitrixUserPropertyType\Utils\HtmlHelper;
  *
  * @package WebArch\BitrixUserPropertyType
  */
-class TimeType extends UserTypeBase implements ConvertibleValueInterface, CheckableValueInterface, AdminListEditInterface, EntityFieldAwareInterface
+class TimeType extends UserTypeBase implements ConvertibleValueInterface, CheckableValueInterface, AdminListEditInterface, EntityFieldAwareInterface, ArrayForSingleValueAwareInterface
 {
     /**
      * Признак отрицательной величины. Может быть пустым(время положительное) или содержать знак "-"(время
@@ -696,5 +697,13 @@ TXT;
         } else {
             return (new TimeField($name));
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function canUseArrayValueForSingleField(): bool
+    {
+        return true;
     }
 }

@@ -1,6 +1,14 @@
 Change Log
 ============
 
+0.7.4
+-----
+
+### Исправлено
+
+- не был реализован `UserTypeInterface::canUseArrayValueForSingleField()`, из-за чего `TimeType` и другие свойства были
+  сломаны.
+
 0.7.3
 -----
 
