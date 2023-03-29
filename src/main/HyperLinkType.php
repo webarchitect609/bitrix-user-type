@@ -2,6 +2,7 @@
 
 namespace WebArch\BitrixUserPropertyType;
 
+use WebArch\BitrixUserPropertyType\Abstraction\CanUseArrayValueForSingleFieldTrait;
 use WebArch\BitrixUserPropertyType\Abstraction\Custom\ArrayForSingleValueAwareInterface;
 use WebArch\BitrixUserPropertyType\Abstraction\Custom\CheckableValueInterface;
 use WebArch\BitrixUserPropertyType\Abstraction\Custom\ConvertibleValueInterface;
@@ -18,6 +19,7 @@ use WebArch\BitrixUserPropertyType\Abstraction\UserTypeBase;
 class HyperLinkType extends UserTypeBase implements ConvertibleValueInterface, CheckableValueInterface, ArrayForSingleValueAwareInterface
 {
     use StringColTypeTrait;
+    use CanUseArrayValueForSingleFieldTrait;
 
     const TARGET_SELF = '_self';
 
@@ -210,7 +212,7 @@ END;
      * @param string $href
      * @param string $text
      * @param string $target
-     * @param int $sort
+     * @param int    $sort
      *
      * @return array
      */
@@ -264,13 +266,5 @@ END;
         }
 
         return [];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function canUseArrayValueForSingleField(): bool
-    {
-        return true;
     }
 }
