@@ -118,7 +118,7 @@ class WeekDayType extends UserTypeBase implements AdminListViewMultyInterface
      * @return string
      *
      */
-    protected static function getSelectHTML($name, $current = null, $multiple = false)
+    protected static function getSelectHTML($name, $current = null, $multiple = false, $mandatory = false)
     {
         if (empty(static::$days)) {
             for ($i = WeekDayISO8601::MONDAY; $i <= WeekDayISO8601::SUNDAY; $i++) {
@@ -126,7 +126,11 @@ class WeekDayType extends UserTypeBase implements AdminListViewMultyInterface
             }
         }
         $return = '<select name="' . $name . '" ' . ($multiple ? 'multiple' : '') . '>';
-        $return .= '<option></option>';
+
+        if (!$multiple && !$mandatory) {
+            $return .= '<option>(Не выбрано)</option>';
+        }
+
         foreach (static::$days as $i => $day) {
             $selected = false;
             if (null !== $current) {
@@ -188,7 +192,8 @@ class WeekDayType extends UserTypeBase implements AdminListViewMultyInterface
             if ($userField['VALUE_ID'] < 1 && !empty($userField['SETTINGS']['DEFAULT_VALUE'])) {
                 $htmlControl['VALUE'] = $userField['SETTINGS']['DEFAULT_VALUE'];
             }
-            $return = self::getSelectHTML($userField['FIELD_NAME'], $htmlControl['VALUE']);
+            $return = self::getSelectHTML($userField['FIELD_NAME'], $htmlControl['VALUE'], false,
+                'Y' === $userField['MANDATORY']);
         } elseif (!empty($htmlControl['VALUE'])) {
             $return = static::getAdminListViewHTML($userField, $htmlControl);
         }
@@ -239,7 +244,9 @@ class WeekDayType extends UserTypeBase implements AdminListViewMultyInterface
         $return = '&nbsp;';
         if ($userField['EDIT_IN_LIST'] === 'Y') {
             $return = '<table id="table_' . $userField['FIELD_NAME'] . '">
-                <tr><td>' . self::getSelectHTML($htmlControl['NAME'], $htmlControl['VALUE'], true) . '</td></tr>
+                <tr><td>' .
+                    self::getSelectHTML($htmlControl['NAME'], $htmlControl['VALUE'], true, 'Y' === $userField['MANDATORY']) .
+                '</td></tr>
             </table>';
         } elseif (!empty($htmlControl['VALUE'])) {
             $return = static::getAdminListViewHTMLMulty($userField, $htmlControl);
