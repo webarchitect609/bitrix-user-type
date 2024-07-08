@@ -11,11 +11,13 @@
   "authors": [
     {
       "name": "Sergey Gripinskiy",
-      "email": "web-architect@mail.ru"
+      "email": "web-architect@mail.ru",
+      "role": "Owner"
     },
     {
       "name": "Dmitry Panychev",
-      "email": "thor_work@yahoo.com"
+      "email": "thor_work@yahoo.com",
+      "role": "Contributor"
     }
   ],
   "require": {
@@ -23,11 +25,14 @@
     "webarchitect609/bitrix-cache": "^1.6 || ^2.0",
     "ext-mbstring": "*",
     "anahkiasen/html-object": "^1.4",
-    "webarchitect609/bitrix-orm-tools": "^2.1"
+    "webarchitect609/bitrix-orm-tools": "^2.6"
   },
   "autoload": {
     "psr-4": {
       "WebArch\\BitrixUserPropertyType\\": "src/main"
-    }
+    },
+    "files": [
+      "include/class_alias.php"
+    ]
   }
 }
