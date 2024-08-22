@@ -28,11 +28,11 @@
     "webarchitect609/bitrix-orm-tools": "^2.6"
   },
   "autoload": {
+    "files": [
+      "src/inc/aliases.php"
+    ],
     "psr-4": {
       "WebArch\\BitrixUserPropertyType\\": "src/main"
-    },
-    "files": [
-      "include/class_alias.php"
-    ]
+    }
   }
 }

@@ -1,6 +1,13 @@
 Change Log
 ============
 
+0.8.1
+-----
+
+### Исправлено
+
+- не срабатывал алиас `\WebArch\BitrixOrmTools\Field\TimeField -> \WebArch\BitrixUserPropertyType\Field\TimeField`
+
 0.8.0
 -----
 
