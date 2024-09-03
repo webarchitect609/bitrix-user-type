@@ -3,13 +3,10 @@
 use WebArch\BitrixUserPropertyType\Field\TimeField;
 
 /**
- * For backward compatibility of the client code after moving TimeField
+ * For backward compatibility of the client code after moving TimeField.
+ * require_once this file in init.php if you get 'Class "WebArch\BitrixOrmTools\Field\TimeField" not found' error 
  */
-if (
-    array_key_exists('DOCUMENT_ROOT', $_SERVER)
-    && is_file($_SERVER['DOCUMENT_ROOT'] . '/bitrix/modules/main/include.php')
-    && !class_exists("\\WebArch\\BitrixOrmTools\\Field\\TimeField")
-) {
-    require_once $_SERVER['DOCUMENT_ROOT'] . '/bitrix/modules/main/include.php';
+/** @noinspection ClassConstantCanBeUsedInspection */
+if (!class_exists("\\WebArch\\BitrixOrmTools\\Field\\TimeField")) {
     class_alias(TimeField::class, "\\WebArch\\BitrixOrmTools\\Field\\TimeField");
 }

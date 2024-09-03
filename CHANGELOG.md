@@ -1,6 +1,20 @@
 Change Log
 ============
 
+0.9.0
+-----
+
+### НАРУШЕНИЕ ОБРАТНОЙ СОВМЕСТИМОСТИ
+
+- отключён автоматический алиас
+  `\WebArch\BitrixOrmTools\Field\TimeField -> \WebArch\BitrixUserPropertyType\Field\TimeField`, из-за которого Битрикс
+  запускался слишком рано, что могло ломать работу Битрикс агентов на `cron`, делая невозможным остановить объявление
+  константы `BX_CRONTAB_SUPPORT`.
+
+### Исправлено
+
+- `TimeType` ссылался на несуществующий `\WebArch\BitrixOrmTools\Field\TimeField`
+
 0.8.1
 -----
 

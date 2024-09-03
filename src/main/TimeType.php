@@ -7,7 +7,6 @@ use Bitrix\Main\ORM\Fields\Field;
 use Bitrix\Main\SystemException;
 use HtmlObject\Element;
 use HtmlObject\Input;
-use WebArch\BitrixOrmTools\Field\TimeField;
 use WebArch\BitrixUserPropertyType\Abstraction\CanUseArrayValueForSingleFieldTrait;
 use WebArch\BitrixUserPropertyType\Abstraction\Custom\AdminListEditInterface;
 use WebArch\BitrixUserPropertyType\Abstraction\Custom\ArrayForSingleValueAwareInterface;
@@ -18,6 +17,7 @@ use WebArch\BitrixUserPropertyType\Abstraction\UserTypeBase;
 use WebArch\BitrixUserPropertyType\Abstraction\UserTypeInterface;
 use WebArch\BitrixUserPropertyType\Exception\InvalidArgumentException;
 use WebArch\BitrixUserPropertyType\Exception\LogicException;
+use WebArch\BitrixUserPropertyType\Field\TimeField;
 use WebArch\BitrixUserPropertyType\Utils\HtmlHelper;
 
 /**
