@@ -88,7 +88,7 @@ class WeekDayType extends UserTypeBase implements AdminListViewMultyInterface
         <tr>
             <td>Значение по умолчанию:</td>
             <td>
-                ' . $value . '
+                '. self::getSelectHTML($htmlControl['NAME'] . '[DEFAULT_VALUE]', $value) .'
             </td>
         </tr>
 		';
